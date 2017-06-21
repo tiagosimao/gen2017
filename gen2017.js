@@ -12,6 +12,8 @@ const MAX_SUM_ARTICLES = 500;
 
 let db = {};
 
+app.use(express.static('public'));
+
 app.get('/api/db/*', function (req, res) {
   let prefix = req.path.replace(/^\/api\/db\//,"");
   let q = [];
@@ -391,7 +393,6 @@ app.listen(3000, function () {
   processTags();
   app.set('views', './views');
   app.set('view engine', 'pug');
-  app.use(express.static('public'));
 });
 
 

@@ -6,6 +6,30 @@ body {
   text-decoration: none;
 }
 
+div.intro {
+  text-align: center;
+}
+
+div.bar img {
+  position: relative;
+  top: -20px;
+  margin-bottom: -100px;
+}
+
+div.bar span{
+  position: relative;
+  top: -50px;
+}
+
+div.bar {
+  background: rgb(1, 87, 130);
+  color: white;
+}
+
+div.logo {
+  text-align: center;
+}
+
 li {
   color: rgb(255,255,255);
   background: rgb(1, 87, 130);
@@ -31,4 +55,20 @@ a {
     text-decoration: inherit;
     color: inherit;
     cursor: auto;
+}
+
+li input {
+  font-family: Roboto, sans-serif;
+  font-size: 3vw;
+  width: 2em;
+  margin-left: 1em;
+}
+
+li button {
+  font-family: Roboto, sans-serif;
+  font-size: 3vw;
+  background: transparent;
+  color: white;
+  width: 2em;
+  margin-left: 1em;
 }

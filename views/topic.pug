@@ -5,6 +5,9 @@ html
       include aleste.css
     title= 'Aleste on ' + model.tag.label
   body
+    div(class="bar")
+      img(src="/mstile-150x150.png")
+      span Aleste
     h3= 'Highlights on \"' + model.tag.label + '\" over the last ' + model.elapsedTimeString
     p= 'The highlights bellow where identified by Aleste the bot, over a total of ' + model.tagArticles.length + ' articles'
     ul(class="sums")
