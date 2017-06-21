@@ -4,10 +4,13 @@ body {
   font-family: Roboto, sans-serif;
   font-size: 3vw;
   text-decoration: none;
+  line-height: 2em;
 }
 
 div.intro {
+  font-family: 'Dosis', sans-serif;
   text-align: center;
+  letter-spacing: 0.3em;
 }
 
 div.bar img {
@@ -17,8 +20,11 @@ div.bar img {
 }
 
 div.bar span{
+  font-family: 'Dosis', sans-serif;
+  font-size: 4vw;
   position: relative;
   top: -50px;
+  letter-spacing: 0.3em;
 }
 
 div.bar {
