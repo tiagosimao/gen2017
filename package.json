@@ -1,0 +1,20 @@
+{
+  "name": "gen2017",
+  "version": "1.0.0",
+  "description": "GEN",
+  "main": "gen2017.js",
+
+  "author": "Tiago Simao",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/username/repository.git"
+  },
+  "dependencies": {
+      "express": "4.15.3",
+      "pug": "2.0.0-rc.2",
+      "elasticsearch": "13.0.1 ",
+      "request": "2.81.0",
+      "xml2js": "0.4.17"
+    }
+}

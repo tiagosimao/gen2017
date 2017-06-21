@@ -1,0 +1,10 @@
+html
+  head
+    title= tag.label
+  body
+    ul
+      if sum === undefined
+        li This topic has no updates
+      else
+        each entry in sum.entries
+            li= entry.text

@@ -1,0 +1,8 @@
+html
+  head
+    title Aleste: Choose Topic
+  body
+    h2 Choose Topic
+    each tag in tags
+      li
+        a(href='tag/'+tag.code)= tag.label + ' (' + tag.articleCount + ')'
