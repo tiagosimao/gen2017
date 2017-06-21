@@ -1,5 +1,8 @@
 html
   head
+    link(href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet")
+    style
+      include aleste.css
     title Aleste
   body
     h3= 'Most relevant topics in the last ' + model.elapsedTimeString
@@ -10,6 +13,6 @@ html
         each tag in model.tags
           li
             a(href='tag/'+tag.code+'?aleste='+model.aleste)= tag.label + ' (' + tag.articleCount + ')'
-    ul
+    ul(class="ctrl")
       li
         a(href='/') Change time selection

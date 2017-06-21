@@ -1,19 +1,23 @@
 html
   head
+    link(href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet")
+    style
+      include aleste.css
     title= 'Aleste on ' + model.tag.label
   body
     h3= 'Highlights on \"' + model.tag.label + '\" over the last ' + model.elapsedTimeString
-    ul
+    p= 'The highlights bellow where identified by Aleste the bot, over a total of ' + model.tagArticles.length + ' articles'
+    ul(class="sums")
       if model.sum === undefined
         li This topic had no updates
       else
         each entry in model.sum.entries
             li= entry.text
     if model.tag
-      ul
+      ul(class="ctrl")
         li
           a(href=model.path) Change time selection
         li
-          a(href=model.siteTopicUrl)= 'List articles about \"' + model.tag.label + '\"'
+          a(href=model.siteTopicUrl)= 'Latest articles about \"' + model.tag.label + '\"'
         li
           a(href='/?aleste='+model.aleste) Look for other topics

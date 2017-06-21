@@ -49,11 +49,11 @@ app.get('/*', function (req, res) {
   let tagId = req.path.replace(/\//,"");
   let now = 1497998042934;
   if(req.query.aleste){
-    let aleste = 3600*1000*24*Number.parseInt(req.query.aleste.replace(/d/,""));
-    let since = new Date(now-aleste);
+    let since = toDate(req.query.aleste);
     getSummaryByDate(tagId,since,function(sum){
       res.render('topic', {model:{
         "tag":db[tagId],
+        "tagArticles": getTagArticles(db[tagId],since),
         "sum": sum,
         "aleste": req.query.aleste,
         "path": req.path,
@@ -391,6 +391,7 @@ app.listen(3000, function () {
   processTags();
   app.set('views', './views');
   app.set('view engine', 'pug');
+  app.use(express.static('public'));
 });
 
 
