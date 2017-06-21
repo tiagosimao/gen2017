@@ -1,8 +1,15 @@
 html
   head
-    title Aleste: Choose Topic
+    title Aleste
   body
-    h2 Choose Topic
-    each tag in tags
+    h3= 'Most relevant topics in the last ' + model.elapsedTimeString
+    ul
+      if model.tags === undefined || model.tags.length == 0
+        li Nothing happened
+      else
+        each tag in model.tags
+          li
+            a(href='tag/'+tag.code+'?aleste='+model.aleste)= tag.label + ' (' + tag.articleCount + ')'
+    ul
       li
-        a(href='tag/'+tag.code)= tag.label + ' (' + tag.articleCount + ')'
+        a(href='/') Change time selection

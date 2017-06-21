@@ -1,15 +1,25 @@
 html
   head
-    title label
+    if model.tag === undefined
+      title Aleste
+    else
+      title= 'Aleste on \"' + model.tag.label + '\"'
   body
-    h3= 'When have you lost track on ' + label + '?'
-    div
-      ul
-        li
-          a(href='?aleste=1d') Yesterday
-        li
-          a(href='?aleste=7d') Last Week
-        li
-          a(href='?aleste=30d') Last Month
-        li
-          a(href='?aleste=300d') I need the whole picture
+    if model.tag === undefined
+      h3 Pick up from when?
+    else
+      h3= 'Show highlights on \"' + model.tag.label + '\" since'
+    ul
+      li
+        a(href='?aleste=1d') Yesterday
+      li
+        a(href='?aleste=7d') Last Week
+      li
+        a(href='?aleste=30d') Last Month
+      li
+        form(action="", method="GET")
+          label(for='aleste') This number of days ago:
+          input#name.form-control(type='text', placeholder='' name='aleste')
+          button.btn.btn-primary(type='submit') Go!
+      li
+        a(href='?aleste=300d') I really need the whole picture

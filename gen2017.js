@@ -7,6 +7,9 @@ const xml2js = require('xml2js');
 const express = require('express');
 const app = express();
 
+const MAX_TOPICS = 10;
+const MAX_SUM_ARTICLES = 500;
+
 let db = {};
 
 app.get('/api/db/*', function (req, res) {
@@ -23,19 +26,23 @@ app.get('/api/db/*', function (req, res) {
 
 app.get('/api/*', function (req, res) {
   let tagId = req.path.replace(/^\/api\//,"");
-  let now = 1497998042934;
-  let aleste = 3600*1000*24;
-  if(req.query.aleste){
-    aleste = 3600*1000*24*Number.parseInt(req.query.aleste.replace(/d/,""));
-  }
-  let since = new Date(now-aleste);
-  getSummaryByDate(tagId,since,function(sum){
+  getSummaryByDate(tagId,toDate(req.query.aleste),function(sum){
     res.send(sum);
   });
 });
 
 app.get('/', function (req, res) {
-  res.render('browse', {tags: sortTags()});
+  if(req.query.aleste){
+    res.render('browse', {model:{
+      aleste: req.query.aleste,
+      tags: sortTags(toDate(req.query.aleste)),
+      elapsedTimeString: req.query.aleste.replace(/d/," days")
+    }});
+  } else {
+    res.render('ask', {model:{
+
+    }});
+  }
 });
 
 app.get('/*', function (req, res) {
@@ -45,14 +52,28 @@ app.get('/*', function (req, res) {
     let aleste = 3600*1000*24*Number.parseInt(req.query.aleste.replace(/d/,""));
     let since = new Date(now-aleste);
     getSummaryByDate(tagId,since,function(sum){
-      res.render('index', {"tag": db[tagId], "sum": sum});
+      res.render('topic', {model:{
+        "tag":db[tagId],
+        "sum": sum,
+        "aleste": req.query.aleste,
+        "path": req.path,
+        "siteTopicUrl": "http://expresso.pt" + req.path.replace(/tag\//,"palavra/"),
+        "elapsedTimeString": req.query.aleste.replace(/d/," days")
+      }});
     });
   } else {
-    res.render('ask', db[tagId]);
+    res.render('ask', {model:{tag:db[tagId],aleste: req.query.aleste}});
   }
 });
 
-
+function toDate(input) {
+  let now = 1497998042934; // stuck in time for PoC
+  let aleste = 3600*1000*24; // defaults to 1 day
+  if(input){
+    aleste = 3600*1000*24*Number.parseInt(input.replace(/d/,""));
+  }
+  return new Date(now-aleste).getTime();
+}
 
 function storeContent(obj){
   if(obj){
@@ -141,7 +162,7 @@ function summarize(q,sumId,after) {
       after(db[sumId]);
     } else {
     let totalText = "";
-    for(let i=0;i<q.length;++i){
+    for(let i=Math.max(0,q.length-MAX_SUM_ARTICLES);i<q.length;++i){
       let article = db[q[i].id];
       if(article && article.body) {
         totalText += "\n" + article.body;
@@ -220,18 +241,46 @@ function getSummaryByDate(topic,fromDate,after){
   }
 }
 
-function sortTags() {
+function getTagArticles(tag,since) {
+  let result = [];
+  if(tag){
+    let keys = Object.keys(tag.articles);
+    for(let i=0;i<keys.length;++i){
+      let k = keys[i];
+      let article = tag.articles[k];
+      if(article && article.stamp > since){
+        result.push(article);
+      }
+    }
+  }
+  return result;
+}
+
+function sortTags(since) {
   let tags = [];
-  Object.keys(db).forEach(function(k, v){
+  let keys = Object.keys(db);
+  for(let i=0;i<keys.length;++i){
+    let k = keys[i];
     if(k.startsWith("tag/")){
       let got = db[k];
-      tags.push(got);
+      let articles = getTagArticles(got,since);
+      if(articles && articles.length>0){
+        tags.push({
+          label: got.label,
+          code: got.code,
+          articleCount: articles.length
+        });
+      }
     }
-  });
+  }
   tags = tags.sort(function(a,b){
     return b.articleCount - a.articleCount;
   });
-  return tags;
+  let result = [];
+  for(let i=0;i<Math.min(MAX_TOPICS,tags.length);++i){
+    result.push(tags[i]);
+  }
+  return result;
 }
 
 function sortArticlesInTags() {
@@ -251,15 +300,14 @@ function sortArticlesInTags() {
     tags[i].articles.sort(function(a,b){
       return b.stamp - b.stamp;
     });
-    /*if(tags[i].articleCount>3){
-      console.log(tags[i].code+":"+tags[i].label+":"+tags[i].articleCount);
-    }*/
   }
 }
 
 function processTags() {
   purgeTags();
-  Object.keys(db).forEach(function(k, v){
+  let keys = Object.keys(db);
+  for(let m=0;m<keys.length;++m){
+    let k = keys[m];
     if(k.startsWith("content/")){
       let got = db[k];
       if(got.tags){
@@ -273,11 +321,13 @@ function processTags() {
             db["tag/"+gotTag.code].articles=[];
           }
           existingTag.articleCount++;
-          existingTag.articles.push({id:k,stamp:Date.parse(got.publishedDate)});
+          let theStamp = Date.parse(got.publishedDate);
+//          console.log(theStamp);
+          existingTag.articles.push({id:k,stamp:theStamp});
         }
       }
     }
-  });
+  }
   sortArticlesInTags();
   persistDb();
 }
@@ -338,6 +388,7 @@ function persistDb(){
 
 app.listen(3000, function () {
   loadDb();
+  processTags();
   app.set('views', './views');
   app.set('view engine', 'pug');
 });

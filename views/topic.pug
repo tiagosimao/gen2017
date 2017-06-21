@@ -1,0 +1,19 @@
+html
+  head
+    title= 'Aleste on ' + model.tag.label
+  body
+    h3= 'Highlights on \"' + model.tag.label + '\" over the last ' + model.elapsedTimeString
+    ul
+      if model.sum === undefined
+        li This topic had no updates
+      else
+        each entry in model.sum.entries
+            li= entry.text
+    if model.tag
+      ul
+        li
+          a(href=model.path) Change time selection
+        li
+          a(href=model.siteTopicUrl)= 'List articles about \"' + model.tag.label + '\"'
+        li
+          a(href='/?aleste='+model.aleste) Look for other topics
