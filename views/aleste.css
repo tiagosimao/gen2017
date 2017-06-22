@@ -7,6 +7,10 @@ body {
   line-height: 2em;
 }
 
+.contents{
+    margin: 4vw;
+}
+
 div.intro {
   font-family: 'Dosis', sans-serif;
   text-align: center;

@@ -305,6 +305,18 @@ function sortArticlesInTags() {
   }
 }
 
+function countTags() {
+  let count = 0;
+  let keys = Object.keys(db);
+  for(let m=0;m<keys.length;++m){
+    let k = keys[m];
+    if(k.startsWith("tag/ed")){
+      let got = db[k];
+      ++count;
+    }
+  }
+  console.log("Total topics: " + count);
+}
 function processTags() {
   purgeTags();
   let keys = Object.keys(db);
@@ -390,7 +402,8 @@ function persistDb(){
 
 app.listen(3000, function () {
   loadDb();
-  processTags();
+  //processTags();
+  //countTags();
   app.set('views', './views');
   app.set('view engine', 'pug');
 });

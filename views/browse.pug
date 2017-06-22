@@ -12,14 +12,19 @@ html
       include aleste.css
     title Aleste
   body
-    h3= 'Most relevant topics in the last ' + model.elapsedTimeString
-    ul
-      if model.tags === undefined || model.tags.length == 0
-        li Nothing happened
-      else
-        each tag in model.tags
-          li
-            a(href='tag/'+tag.code+'?aleste='+model.aleste)= tag.label + ' (' + tag.articleCount + ')'
-    ul(class="ctrl")
-      li
-        a(href='/') Change time selection
+    div(class="bar")
+      a(href="/")
+        img(src="/mstile-150x150.png")
+        span Aleste
+    div(class="contents")
+      h3= 'Most relevant topics in the last ' + model.elapsedTimeString
+      ul
+        if model.tags === undefined || model.tags.length == 0
+          li Nothing happened
+        else
+          each tag in model.tags
+            li
+              a(href='tag/'+tag.code+'?aleste='+model.aleste)= tag.label + ' (' + tag.articleCount + ')'
+      ul(class="ctrl")
+        li
+          a(href='/') Change time selection

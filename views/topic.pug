@@ -13,21 +13,23 @@ html
     title= 'Aleste on ' + model.tag.label
   body
     div(class="bar")
-      img(src="/mstile-150x150.png")
-      span Aleste
-    h3= 'Highlights on \"' + model.tag.label + '\" over the last ' + model.elapsedTimeString
-    p= 'The highlights bellow where identified by Aleste the bot, over a total of ' + model.tagArticles.length + ' articles'
-    ul(class="sums")
-      if model.sum === undefined
-        li This topic had no updates
-      else
-        each entry in model.sum.entries
-            li= entry.text
-    if model.tag
-      ul(class="ctrl")
-        li
-          a(href=model.path) Change time selection
-        li
-          a(href=model.siteTopicUrl)= 'Latest articles about \"' + model.tag.label + '\"'
-        li
-          a(href='/?aleste='+model.aleste) Look for other topics
+      a(href="/")
+        img(src="/mstile-150x150.png")
+        span Aleste
+    div(class="contents")
+      h3= 'Highlights on \"' + model.tag.label + '\" over the last ' + model.elapsedTimeString
+      p= 'The highlights bellow where identified by Aleste the bot, over a total of ' + model.tagArticles.length + ' articles'
+      ul(class="sums")
+        if model.sum === undefined
+          li This topic had no updates
+        else
+          each entry in model.sum.entries
+              li= entry.text
+      if model.tag
+        ul(class="ctrl")
+          li
+            a(href=model.path) Change time selection
+          li
+            a(href=model.siteTopicUrl)= 'Latest articles about \"' + model.tag.label + '\"'
+          li
+            a(href='/?aleste='+model.aleste) Look for other topics

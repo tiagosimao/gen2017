@@ -14,7 +14,7 @@ html
       title Aleste
     else
       title= 'Aleste on \"' + model.tag.label + '\"'
-  body
+  body(class="contents")
     if model.tag === undefined
       div(class="intro")
         h1 Aleste
